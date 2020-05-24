@@ -24,7 +24,7 @@ s_yixi3 = sum([yi*(xi**3) for xi in data[X] for yi in data[Y]])
 
 def f(x):
     return s_yi2 - 2*x[0]*s_yixi3 - 2*x[1]*s_yixi2 - 2*x[2]*s_yixi - 2*x[3]*s_yi + \
-            (x[0]**2)*s_xi6 + (x[1]**2)*s_xi4 + (x[3]**2)*s_xi2 + (x[4]**2) + \
+            (x[0]**2)*s_xi6 + (x[1]**2)*s_xi4 + (x[2]**2)*s_xi2 + (x[3]**2) + \
             2*x[0]*x[1]*s_xi5 + 2*x[0]*x[2]*s_xi4 + 2*x[0]*x[3]*s_xi3 + \
             2*x[1]*x[2]*s_xi3 + 2*x[1]*x[3]*s_xi2 + 2*x[2]*x[3]*s_xi 
   
