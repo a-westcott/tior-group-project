@@ -34,21 +34,20 @@ def gradf(x):
         -2*s_yixi3 + 2*x[0]*s_xi6 + 2*x[1]*s_xi5 + 2*x[2]*s_xi4 + 2*x[3]*s_xi3,
         -2*s_yixi2 + 2*x[1]*s_xi4 + 2*x[0]*s_xi5 + 2*x[2]*s_xi3 + 2*x[3]*s_xi2,
         -2*s_yixi  + 2*x[2]*s_xi2 + 2*x[0]*s_xi4 + 2*x[1]*s_xi3 + 2*x[3]*s_xi ,
-        -2*s_yi    + 2*x[3]*s_xi0 + 2*x[0]*s_xi3 + 2*x[1]*s_xi2 + 2*x[2]*s_xi  ])
+        -2*s_yi    + 2*x[3]*s_xi0 + 2*x[0]*s_xi3 + 2*x[1]*s_xi2 + 2*x[2]*s_xi  ], dtype=np.longdouble)
 
 def hessf(x):
     return np.array([
     [2*s_xi6, 2*s_xi5, 2*s_xi4, 2*s_xi3],
     [2*s_xi5, 2*s_xi4, 2*s_xi3, 2*s_xi2],
     [2*s_xi4, 2*s_xi3, 2*s_xi2, 2*s_xi ],
-    [2*s_xi3, 2*s_xi2, 2*s_xi , 2*s_xi0]])
+    [2*s_xi3, 2*s_xi2, 2*s_xi , 2*s_xi0]], dtype=np.longdouble)
 
 
 def main():
-    #print(s_xi)
-    # currently we have a negative eigenvalue, and that is bad
-    #print(eigh(hessf(1), eigvals_only=True))
-    #print(eig(hessf(1), right=False))
+    # positive eigenvalues!
+    print(eigh(hessf(1), eigvals_only=True))
+
 
     b1 = 1.041251333*10**-3
     b2 = -2.28569*10**-2
