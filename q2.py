@@ -1,7 +1,7 @@
 import numpy as np
 from math import log
 
-K = 10**3
+K = np.longdouble(10**6)
 
 def f1(xi, k):
     return 0.008*xi**3 - 0.03*xi**2 + 0.2*xi - 1/(k*xi)
@@ -14,10 +14,10 @@ def sum_xi_n(x, n):
 
 def p(x, k=K):
     print(x)
-    return 0.002*sum_xi_n(x, 4) - 0.01*sum_xi_n(x, 3) + 0.1*sum_xi_n(x, 2) \
+    return np.longdouble(0.002*sum_xi_n(x, 4) - 0.01*sum_xi_n(x, 3) + 0.1*sum_xi_n(x, 2) \
         + 50*x[0] + 400*x[1] + 80*x[2] + 900*x[3] + 50*x[4] + 30*x[5] + 204 \
         - 1/k * sum([log(xi) for xi in x]) + k/2 *((x[3] + x[5] - 30)**2) \
-        + (x[5] + 40 - x[4])**2 + (x[2] + x[3] - x[0])**2 + (x[1] + x[2] - x[4])**2
+        + (x[5] + 40 - x[4])**2 + (x[2] + x[3] - x[0])**2 + (x[1] + x[2] - x[4])**2)
 
 def grad_p(x, k=K):
     return np.array([
@@ -27,7 +27,7 @@ def grad_p(x, k=K):
         f1(x[3], k) + 900 + k*(2*x[3] - x[0] +x[2] + x[5] -30),
         f1(x[4], k) + 50 - k*(x[1] + x[2] - 2*x[4] + x[5] + 40),
         f1(x[5], k) + 30 + k*(2*x[5] + x[3] - x[4] + 10)
-    ])
+    ], dtype=np.longdouble)
 
 def hess_p(x, k=K):
     return np.array([
@@ -37,13 +37,20 @@ def hess_p(x, k=K):
         [-k, 0, k, f2(x[3], k) + 2*k, 0, k],
         [0, -k, -k, 0, f2(x[4], k) + 2*k, -k],
         [0, 0, 0, k, -k, f2(x[5], k) + 2*k]
-    ])
+    ], dtype=np.longdouble)
 
 
 def main():
     from descent import BFGS
 
-    print(BFGS(p, grad_p, [1,1,1,1,1,1], 10**(-2), 10**(-5), 10, np.eye(6)))
+    print(BFGS(p, 
+               grad_p, 
+               np.array([1,1,1,1,1,1], dtype=np.longdouble),
+               np.longdouble(10**(-1)), 
+               np.longdouble(10**(-15)), 
+               1, 
+               np.eye(6, dtype=np.longdouble),
+               True))
 
 
 

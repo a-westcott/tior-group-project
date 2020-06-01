@@ -90,7 +90,7 @@ def multiVariableGoldenSectionSearch(f, a, b, tolerance, x, d):
     fminEstimate = f(x + minEstimate*d)  
     return minEstimate, fminEstimate
 
-def BFGS(f, gradf, x0, tolerance1, tolerance2, T, H0, **kwargs):
+def BFGS(f, gradf, x0, tolerance1, tolerance2, T, H0, x_pos=False, **kwargs):
     '''
     INPUT
         f:          the multivariable function to minimise
@@ -114,9 +114,12 @@ def BFGS(f, gradf, x0, tolerance1, tolerance2, T, H0, **kwargs):
     
     while norm(gradf(xk)) >= tolerance1:
         iteration_number += 1  
-        
+
+        # this is definitely a bad idea
+        '''
         # Correction if det H_old gets too large or small
         H_old /= np.amax(H_old) 
+        '''
 
         # Get dk as a row vector
         dk = -H_old.dot(gradf(xk))

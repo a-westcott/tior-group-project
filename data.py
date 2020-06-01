@@ -24,10 +24,10 @@ s_yixi3 = sum([data[Y][i]*(data[X][i]**3) for i in range(len(data[X]))])
 
 
 def f(x):
-    return  s_yi2 - 2*x[0]*s_yixi3 - 2*x[1]*s_yixi2 - 2*x[2]*s_yixi - 2*x[3]*s_yi + \
+    return  np.longdouble(s_yi2 - 2*x[0]*s_yixi3 - 2*x[1]*s_yixi2 - 2*x[2]*s_yixi - 2*x[3]*s_yi + \
             x[0]**2 * s_xi6 + x[1]**2 * s_xi4 + x[2]**2 * s_xi2 + x[3]**2 * s_xi0 + \
             2*x[0]*x[1]*s_xi5 + 2*x[0]*x[2]*s_xi4 + 2*x[0]*x[3]*s_xi3 + \
-            2*x[1]*x[2]*s_xi3 + 2*x[1]*x[3]*s_xi2 + 2*x[2]*x[3]*s_xi
+            2*x[1]*x[2]*s_xi3 + 2*x[1]*x[3]*s_xi2 + 2*x[2]*x[3]*s_xi)
   
 def gradf(x):
     return np.array([
@@ -45,17 +45,17 @@ def hessf(x):
 
 
 def main():
-    # positive eigenvalues!
-    print(eigh(hessf(1), eigvals_only=True))
+    from descent import BFGS
 
-
-    b1 = 1.041251333*10**-3
-    b2 = -2.28569*10**-2
-    b3 = 2.616989*10**-1
-    b4 = 3.94403
-
-    sse0 = f([b1, b2, b3, b4])
-    print(sse0)
+    print(BFGS(f, 
+               gradf, 
+               np.array([-6,20,-30,150], dtype=np.longdouble), 
+               np.longdouble(10**(-5)), 
+               np.longdouble(10**(-10)), 
+               1, 
+               np.eye(4, dtype=np.longdouble)
+               )
+    )
 
 
 if __name__ == '__main__':
