@@ -1,8 +1,8 @@
 import numpy as np
 from math import log
 
-K = np.longdouble(10**10)
-INF = np.longdouble(10**80)
+K = np.longdouble(10**5)
+INF = np.longdouble(10**40)
 
 
 def f1(xi, k):
@@ -15,7 +15,7 @@ def sum_xi_n(x, n):
     return sum([xi**n for xi in x])
 
 def p(x, k=K):
-    print(x)
+    # print(x)
     for element in x:
         if element < 0:
             return INF
@@ -28,7 +28,7 @@ def grad_p(x, k=K):
     return np.array([
         f1(x[0], k) + 50 - k*(x[2] + x[3] - x[0]),
         f1(x[1], k) + 400 + k*(x[1] + x[2] - x[4]),
-        f1(x[2], k) + 80 + k*(2*x[2] + x[1] + x[3] - x[4]),
+        f1(x[2], k) + 80 + k*(2*x[2] + x[1] + x[3] - x[0] - x[4]),
         f1(x[3], k) + 900 + k*(2*x[3] - x[0] +x[2] + x[5] -30),
         f1(x[4], k) + 50 - k*(x[1] + x[2] - 2*x[4] + x[5] + 40),
         f1(x[5], k) + 30 + k*(2*x[5] + x[3] - x[4] + 10)
@@ -38,7 +38,7 @@ def hess_p(x, k=K):
     return np.array([
         [f2(x[0], k) + k, 0, -k, -k, 0, 0],
         [0, f2(x[1], k) + k, k, 0, -k, 0],
-        [0, k, f2(x[2], k) + 2*k, k, -k, 0],
+        [-k, k, f2(x[2], k) + 2*k, k, -k, 0],
         [-k, 0, k, f2(x[3], k) + 2*k, 0, k],
         [0, -k, -k, 0, f2(x[4], k) + 2*k, -k],
         [0, 0, 0, k, -k, f2(x[5], k) + 2*k]
@@ -52,7 +52,7 @@ def main():
                grad_p, 
                np.array([1,10,10,1,10,1], dtype=np.longdouble),
                np.longdouble(10**(-2)), 
-               np.longdouble(10**(-15)), 
+               np.longdouble(10**(-8)), 
                1, 
                np.eye(6, dtype=np.longdouble)
                ))
