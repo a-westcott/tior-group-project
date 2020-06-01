@@ -45,17 +45,31 @@ def hessf(x):
 
 
 def main():
-    from descent import BFGS
+    from descent import BFGS, NewtonMethod
+
+    x0 = np.array([-6,200,-30,2], dtype=np.longdouble)
 
     print(BFGS(f, 
                gradf, 
-               np.array([-6,20,-30,150], dtype=np.longdouble), 
+               x0, 
                np.longdouble(10**(-5)), 
                np.longdouble(10**(-10)), 
                1, 
                np.eye(4, dtype=np.longdouble)
                )
     )
+
+    print(NewtonMethod(f, 
+                       gradf, 
+                       x0, 
+                       np.longdouble(10**(-5)), 
+                       np.longdouble(10**(-10)), 
+                       1, 
+                       hessf
+                   )
+    )
+
+
 
 
 if __name__ == '__main__':

@@ -90,7 +90,7 @@ def multiVariableGoldenSectionSearch(f, a, b, tolerance, x, d):
     fminEstimate = f(x + minEstimate*d)  
     return minEstimate, fminEstimate
 
-def BFGS(f, gradf, x0, tolerance1, tolerance2, T, H0, x_pos=False, **kwargs):
+def BFGS(f, gradf, x0, tolerance1, tolerance2, T, H0, **kwargs):
     '''
     INPUT
         f:          the multivariable function to minimise
