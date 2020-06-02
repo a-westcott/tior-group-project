@@ -5,6 +5,7 @@ from scipy.linalg import eigh, eig
 from itertools import product
 from tqdm import tqdm
 from time import time
+from descent import NewtonMethod, BFGS
 
 N_DIMENSIONS = 4
 X,Y = 0,1
@@ -64,21 +65,37 @@ def scipy_experiment(algorithms, x_range, tolerance1s, Ts, trials):
         # Choose a random point in the x_range
         x0 = np.random.rand(N_DIMENSIONS)*(x_range[1]-x_range[0]) + x_range[0]
         
-        # Time run of algorithm
-        if algorithm == 'nelder-mead':
+        if algorithm == 'newtons':
+            start = time()
+            run = NewtonMethod(f, gradf, x0, tolerance1, 10**(-5), T, hessf)
+            end = time()
+            t = end - start
+            xmin, fmin, k = run
+
+        elif algorithm == 'bfgs':
+            start = time()
+            run = BFGS(f, gradf, x0, tolerance1, 10**(-5), T, np.eye(4, dtype=np.longdouble))
+            end = time()
+            t = end - start
+            xmin, fmin, k = run
+
+        elif algorithm == 'Nelder-mead':
             start = time()
             run = minimize(f, x0, method=algorithm, tol=tolerance1, options={'xatol': 1e-8, 'disp': False})
             end = time()
             t = end - start
+            xmin, fmin, k = run.x, run.fun, run.nit
+
         else:
             start = time()
             run = minimize(f, x0, method=algorithm, jac=gradf, hess=hessf, 
                            tol=tolerance1, options={'xatol': 1e-8, 'disp': False})
             end = time()
             t = end - start
+            xmin, fmin, k = run.x, run.fun, run.nit
         
         # Record trial
-        xmin, fmin, k = run.x, run.fun, run. nit
+        
         for column, result in zip(columns, [algorithm, tolerance1, T, 
                                             str(np.round(x0, 2)), str(np.round(xmin, 2)), round(fmin, 2), k, t]):
             results[column].append(result)
@@ -86,13 +103,13 @@ def scipy_experiment(algorithms, x_range, tolerance1s, Ts, trials):
 
 
 def main():
-    algs = ['Nelder-mead', 'Newton-CG', 'trust-ncg']
+    algs = ['Nelder-mead', 'Newton-CG', 'trust-ncg', 'newtons', 'bfgs']
     x_range = (-5,5)
-    t1s = [10**(x-5) for x in range(12)]
-    Ts = [0.01, 0.1, 1, 10, 30, 50, 100]
+    t1s = [10**(x-3) for x in range(10)]
+    Ts = [10**((x-4)/2) for x in range(9)]
     trials = 100
     results = scipy_experiment(algs, x_range, t1s, Ts, trials)
-    results.to_csv('res.csv')
+    results.to_csv('res2.csv')
 
 def main2():
     algs = ['Nelder-mead', 'Newton-CG', 'trust-ncg']
@@ -101,7 +118,7 @@ def main2():
     Ts = [1]
     trials = 1
     results = scipy_experiment(algs, x_range, t1s, Ts, trials)
-    results.to_csv('res.csv')
+    results.to_csv('res2.csv')
 
 if __name__ == '__main__':
     main()
